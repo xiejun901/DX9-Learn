@@ -1,9 +1,14 @@
 #include<windows.h>
+#include<d3dx9.h>
 #include"mainWindow.h"
 
-INT WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
+int WINAPI WinMain(HINSTANCE hInstance,
+    HINSTANCE hPrevInstance,
+    LPSTR     lpCmdLine,
+    int       nCmdShow)
 {
-    MainWindow app;
+    D3DMainWindow app(L"WINDOW", 640, 480);
     app.InitWindow();
     app.run();
+    
 }
