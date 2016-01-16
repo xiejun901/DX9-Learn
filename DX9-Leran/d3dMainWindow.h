@@ -1,5 +1,5 @@
 #ifndef _MAIN_WINDOW_H_
-#define _MAIN_WINDOW_H
+#define _MAIN_WINDOW_H_
 
 #include<windows.h>
 #include <d3d9.h>
@@ -15,9 +15,9 @@ public:
     virtual ~D3DMainWindow();
 
     static LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    void Setup() {}
-    void Cleanup() {}
-    bool Display(float timeDelta);
+    virtual void Setup() {}
+    virtual void Cleanup() {}
+    virtual bool Display(float timeDelta);
 protected:
     const wchar_t *name;
     HWND hWnd = nullptr;
