@@ -18,10 +18,10 @@
     <ClInclude Include="d3dUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CubeWindow.h">
+    <ClInclude Include="d3dMainWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="d3dMainWindow.h">
+    <ClInclude Include="TeaPotWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -29,10 +29,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CubeWindow.cpp">
+    <ClCompile Include="d3dMainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="d3dMainWindow.cpp">
+    <ClCompile Include="TeaPotWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
