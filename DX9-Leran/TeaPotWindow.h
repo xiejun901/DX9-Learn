@@ -1,6 +1,7 @@
 #ifndef _CUBE_WINDOW_H_
 #define _CUBE_WINDOW_H_
 #include "d3dMainWindow.h"
+#include "d3dUtility.h"
 
 class TeaPotWindow :
     public D3DMainWindow
@@ -11,7 +12,7 @@ public:
     {
         D3DXCreateTeapot(pd3dDevice, &Teapot, 0);
 
-        D3DXVECTOR3 position(0.0f, 0.0f, -3.0f);
+        D3DXVECTOR3 position(0.0f, 0.0f, -5.0f);
         D3DXVECTOR3 target(0.0f, 0.0f, 0.0f);
         D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
         D3DXMATRIX v;
@@ -54,6 +55,12 @@ public:
             pd3dDevice->Present(0, 0, 0, 0);
         }
         return true;
+    }
+    ~TeaPotWindow()
+    {
+        Release(vb);
+        Release(ib);
+        Release(Teapot);
     }
 private:
     IDirect3DVertexBuffer9 *vb = nullptr;
