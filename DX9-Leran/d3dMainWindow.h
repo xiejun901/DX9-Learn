@@ -8,6 +8,7 @@ class D3DMainWindow
 {
 public:
     D3DMainWindow(const wchar_t *_name, int w, int h):name(_name), width(w), height(h) {}
+    D3DMainWindow(): name(L"non-name window"), width(640), height(480){}
     void Init();
     bool InitWindow();
     bool InitD3D();

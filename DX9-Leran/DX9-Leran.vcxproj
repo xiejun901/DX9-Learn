@@ -154,12 +154,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ColorTriangle.h" />
+    <ClInclude Include="LightWindow.h" />
     <ClInclude Include="TeaPotWindow.h" />
     <ClInclude Include="d3dUtility.h" />
     <ClInclude Include="d3dMainWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ColorTrangle.cpp" />
+    <ClCompile Include="LightWindow.cpp" />
     <ClCompile Include="TeaPotWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="d3dMainWindow.cpp" />

@@ -9,7 +9,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     LPSTR     lpCmdLine,
     int       nCmdShow)
 {
-    ColorTrangle app(L"WINDOW", 640, 480);
+    TeaPotWindow app(L"WINDOW", 640, 480);
     app.Init();
     app.Setup();
     app.run();   
