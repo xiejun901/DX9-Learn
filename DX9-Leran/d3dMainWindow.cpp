@@ -166,6 +166,22 @@ int D3DMainWindow::run()
 
 LRESULT D3DMainWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	switch (msg)
+	{
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_ESCAPE:
+			PostQuitMessage(0);
+			break;
+		}
+		break;
+	default:
+		break;
+	}
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 

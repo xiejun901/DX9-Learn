@@ -157,6 +157,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraWindow.h" />
     <ClInclude Include="ColorTriangle.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="LightWindow.h" />
@@ -166,6 +168,8 @@
     <ClInclude Include="TextureWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraWindow.cpp" />
     <ClCompile Include="ColorTrangle.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="LightWindow.cpp" />
