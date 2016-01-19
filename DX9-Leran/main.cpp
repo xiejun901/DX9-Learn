@@ -11,7 +11,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     LPSTR     lpCmdLine,
     int       nCmdShow)
 {
-	CameraWindow app(L"WINDOW", 640, 480);
+	TextureWindow app(L"WINDOW", 640, 480);
     app.Init();
     app.Setup();
     app.run();   
