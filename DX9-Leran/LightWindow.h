@@ -1,5 +1,8 @@
+#ifndef _LIGHT_WINDOW_H_
+#define _LIGHT_WINDOW_H_
 #pragma once
 #include "d3dMainWindow.h"
+#include "d3dUtility.h"
 class LightWindow :
     public D3DMainWindow
 {
@@ -123,7 +126,13 @@ public:
 		}
 		return true;
     }
-    ~LightWindow();
+	~LightWindow() 
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			Release(objects[i]);
+		}
+	}
 
     ID3DXMesh * objects[4] = { 0, 0, 0, 0 };
 	D3DXMATRIX word[4] ;
@@ -131,3 +140,4 @@ public:
 
 };
 
+#endif

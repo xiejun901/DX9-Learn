@@ -158,17 +158,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ColorTriangle.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="LightWindow.h" />
     <ClInclude Include="TeaPotWindow.h" />
     <ClInclude Include="d3dUtility.h" />
     <ClInclude Include="d3dMainWindow.h" />
+    <ClInclude Include="TextureWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ColorTrangle.cpp" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="LightWindow.cpp" />
     <ClCompile Include="TeaPotWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="d3dMainWindow.cpp" />
+    <ClCompile Include="TextureWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

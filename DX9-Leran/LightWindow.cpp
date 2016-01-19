@@ -6,7 +6,3 @@ LightWindow::LightWindow()
 {
 }
 
-
-LightWindow::~LightWindow()
-{
-}
