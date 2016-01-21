@@ -14,7 +14,8 @@ public:
 	{
 		D3DXVECTOR3 lightDirection(0.0f, 1.0f, 0.0f);
 		terrain = new Terrain(pd3dDevice, "c.raw", 128, 128, 10, 1.0f);
-		terrain->loadTexture("grass.bmp");
+		//terrain->loadTexture("crate.jpg");
+		terrain->genTexture();
 
 		pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 		pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
@@ -78,7 +79,7 @@ public:
 			D3DXMATRIX V;
 			camera.getViewMatrix(&V);
 			pd3dDevice->SetTransform(D3DTS_VIEW, &V);
-			pd3dDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, 0);
+			pd3dDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(0.0f, 0.0f, 0.0f, 1.0f), 1.0f, 0);
 			pd3dDevice->BeginScene();
 			D3DXMATRIX I;
 			D3DXMatrixIdentity(&I);
