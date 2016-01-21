@@ -93,7 +93,7 @@ void Camera::getPosition(D3DXVECTOR3 * pos)
 	*pos = _pos;
 }
 
-void Camera::setPoistion(D3DXVECTOR3 * pos)
+void Camera::setPosition(D3DXVECTOR3 * pos)
 {
 	_pos = *pos;
 }

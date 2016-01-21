@@ -23,5 +23,4 @@ void Delete(T t)
     }
 }
 
-
 #endif

@@ -165,6 +165,8 @@
     <ClInclude Include="TeaPotWindow.h" />
     <ClInclude Include="d3dUtility.h" />
     <ClInclude Include="d3dMainWindow.h" />
+    <ClInclude Include="Terrain.h" />
+    <ClInclude Include="TerrainWindow.h" />
     <ClInclude Include="TextureWindow.h" />
   </ItemGroup>
   <ItemGroup>
@@ -172,10 +174,13 @@
     <ClCompile Include="CameraWindow.cpp" />
     <ClCompile Include="ColorTrangle.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="d3dUtility.cpp" />
     <ClCompile Include="LightWindow.cpp" />
     <ClCompile Include="TeaPotWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="d3dMainWindow.cpp" />
+    <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="TerrainWindow.cpp" />
     <ClCompile Include="TextureWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

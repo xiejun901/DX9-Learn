@@ -42,6 +42,12 @@
     <ClInclude Include="CameraWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -69,6 +75,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CameraWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="d3dUtility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
