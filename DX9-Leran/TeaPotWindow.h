@@ -7,7 +7,7 @@ class TeaPotWindow :
     public D3DMainWindow
 {
 public:
-    TeaPotWindow(const wchar_t * _name, int _width, int _height):D3DMainWindow(_name, _width, _height){}
+    TeaPotWindow(const char * _name, int _width, int _height):D3DMainWindow(_name, _width, _height){}
     void Setup() override 
     {
         D3DXCreateTeapot(pd3dDevice, &Teapot, 0);

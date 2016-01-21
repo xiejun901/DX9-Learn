@@ -12,7 +12,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     LPSTR     lpCmdLine,
     int       nCmdShow)
 {
-	TerrainWindow app(L"WINDOW", 640, 480);
+	TerrainWindow app("WINDOW", 640, 480);
     app.Init();
     app.Setup();
     app.run();   

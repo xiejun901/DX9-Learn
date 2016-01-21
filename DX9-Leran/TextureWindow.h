@@ -5,7 +5,7 @@ class TextureWindow :
 	public D3DMainWindow
 {
 public:
-	TextureWindow(const wchar_t *n, int w, int h):D3DMainWindow(n,w,h){}
+	TextureWindow(const char *n, int w, int h):D3DMainWindow(n,w,h){}
 	void Setup() override
 	{
 		box = new Cube(pd3dDevice);
@@ -24,7 +24,7 @@ public:
 
 		auto hr = D3DXCreateTextureFromFile(
 			pd3dDevice,
-			L"crate.jpg",
+			"crate.jpg",
 			&tex);
 		
 		pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);

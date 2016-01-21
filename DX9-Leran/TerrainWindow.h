@@ -7,13 +7,18 @@ class TerrainWindow :
 {
 public:
 	TerrainWindow();
-	TerrainWindow(const wchar_t *n, int w, int h) :D3DMainWindow(n, w, h) {
+	TerrainWindow(const char *n, int w, int h) :D3DMainWindow(n, w, h) {
 
 	}
 	void Setup() override
 	{
 		D3DXVECTOR3 lightDirection(0.0f, 1.0f, 0.0f);
 		terrain = new Terrain(pd3dDevice, "c.raw", 128, 128, 10, 1.0f);
+		terrain->loadTexture("grass.bmp");
+
+		pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+		pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+		pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
 		D3DXMATRIX proj;
 		D3DXMatrixPerspectiveFovLH(

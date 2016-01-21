@@ -7,7 +7,7 @@ class LightWindow :
     public D3DMainWindow
 {
 public:
-    LightWindow(const wchar_t *n, int w, int h): D3DMainWindow(n,w,h){}
+    LightWindow(const char *n, int w, int h): D3DMainWindow(n,w,h){}
     LightWindow();
     void Setup() override
     {

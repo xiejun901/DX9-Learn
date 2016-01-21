@@ -4,12 +4,12 @@ void D3DMainWindow::Init()
 {
     if (!InitWindow())
     {
-        MessageBox(0, L"INIT Window faield.", 0, 0);
+        MessageBox(0, "INIT Window faield.", 0, 0);
         exit(0);
     }
     if (!InitD3D())
     {
-        MessageBox(0, L"INIT D3D faield.", 0, 0);
+        MessageBox(0, "INIT D3D faield.", 0, 0);
         exit(0);
     }
 }
@@ -33,7 +33,7 @@ bool D3DMainWindow::InitWindow()
 
     if (!RegisterClassEx(&winClass))
     {
-        MessageBox(0, L"RegisterClassEx faield.",0 , 0);
+        MessageBox(0, "RegisterClassEx faield.",0 , 0);
         return false;
     }
 
@@ -44,7 +44,7 @@ bool D3DMainWindow::InitWindow()
 
     if (hWnd == NULL)
     {
-        MessageBox(0, L"CrateWindowEx faield.", 0, 0);
+        MessageBox(0, "CrateWindowEx faield.", 0, 0);
         return false;
     }
 
@@ -59,7 +59,7 @@ bool D3DMainWindow::InitD3D()
 
     if (pD3D == NULL)
     {
-        MessageBox(0, L"Direct3DCreate9 faield.", 0, 0);
+        MessageBox(0, "Direct3DCreate9 faield.", 0, 0);
         return false;
     }
 
@@ -67,7 +67,7 @@ bool D3DMainWindow::InitD3D()
 
     if (FAILED(pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm)))
     {
-        MessageBox(0, L"GetAdapterDisplayMode faield.", 0, 0);
+        MessageBox(0, "GetAdapterDisplayMode faield.", 0, 0);
         return false;
     }
 
@@ -78,7 +78,7 @@ bool D3DMainWindow::InitD3D()
         D3DRTYPE_SURFACE, D3DFMT_D16)))
     {
         if (hr == D3DERR_NOTAVAILABLE)
-            MessageBox(0, L"CheckDeviceFormat faield.", 0, 0);
+            MessageBox(0, "CheckDeviceFormat faield.", 0, 0);
             return false;
     }
 
@@ -92,7 +92,7 @@ bool D3DMainWindow::InitD3D()
     if (FAILED(pD3D->GetDeviceCaps(D3DADAPTER_DEFAULT,
         D3DDEVTYPE_HAL, &d3dCaps)))
     {
-        MessageBox(0, L"GetDeviceCaps faield.", 0, 0);
+        MessageBox(0, "GetDeviceCaps faield.", 0, 0);
         return false;
     }
 
@@ -120,7 +120,7 @@ bool D3DMainWindow::InitD3D()
     if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
         dwBehaviorFlags, &d3dpp, &pd3dDevice)))
     {
-        MessageBox(0, L"CreateDevice faield.", 0, 0);
+        MessageBox(0, "CreateDevice faield.", 0, 0);
         return false;
     }
     return true; 

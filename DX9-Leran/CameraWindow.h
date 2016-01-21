@@ -9,7 +9,7 @@ class CameraWindow :
 	public D3DMainWindow
 {
 public:
-	CameraWindow(const wchar_t *n, int w, int h):D3DMainWindow(n,w,h){}
+	CameraWindow(const char *n, int w, int h):D3DMainWindow(n,w,h){}
 	void Setup() override
 	{
 		D3DXCreateTeapot(pd3dDevice, &Teapot, 0);

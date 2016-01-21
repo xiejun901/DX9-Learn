@@ -80,7 +80,7 @@ public:
         }
         return true;
     }
-    ColorTrangle(const wchar_t *n, int w, int h):D3DMainWindow(n, w, h) {}
+    ColorTrangle(const char *n, int w, int h):D3DMainWindow(n, w, h) {}
     ~ColorTrangle() 
     {
         Release(triangle);
