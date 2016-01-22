@@ -14,7 +14,7 @@ public:
 	{
 		D3DXVECTOR3 lightDirection(0.0f, 1.0f, 0.0f);
 		terrain = new Terrain(pd3dDevice, "c.raw", 128, 128, 10, 1.0f);
-		//terrain->loadTexture("crate.jpg");
+		//terrain->loadTexture("grass.bmp");
 		terrain->genTexture();
 
 		pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);

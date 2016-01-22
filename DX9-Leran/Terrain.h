@@ -146,6 +146,11 @@ public:
 		tex->UnlockRect(0);
 		D3DXVECTOR3 lightDirection(0.0f, 1.0f, 0.0f);
 		lightTerrain(&lightDirection);
+		D3DXFilterTexture(
+			tex,
+			0,
+			0,
+			D3DX_DEFAULT);
 	}
 private:
 	void readHeightMapRawFile(const std::string &fileName)
