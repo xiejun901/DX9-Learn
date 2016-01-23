@@ -162,6 +162,8 @@
     <ClInclude Include="ColorTriangle.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="LightWindow.h" />
+    <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="SkyBoxWindow.h" />
     <ClInclude Include="TeaPotWindow.h" />
     <ClInclude Include="d3dUtility.h" />
     <ClInclude Include="d3dMainWindow.h" />
@@ -176,6 +178,8 @@
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="d3dUtility.cpp" />
     <ClCompile Include="LightWindow.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
+    <ClCompile Include="SkyBoxWindow.cpp" />
     <ClCompile Include="TeaPotWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="d3dMainWindow.cpp" />

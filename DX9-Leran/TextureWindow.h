@@ -24,7 +24,7 @@ public:
 
 		auto hr = D3DXCreateTextureFromFile(
 			pd3dDevice,
-			"crate.jpg",
+			"shadowpeak_up.tga",
 			&tex);
 		
 		pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);

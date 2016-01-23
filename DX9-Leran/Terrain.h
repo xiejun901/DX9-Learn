@@ -48,30 +48,6 @@ public:
 			device->SetFVF(TerrainVertex::FVF);
 			device->SetIndices(ib);
 			device->SetTexture(0, tex);
-
-			D3DLIGHT9 light;
-			light.Type = D3DLIGHT_DIRECTIONAL;
-			light.Ambient = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
-			light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-			light.Specular = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
-			light.Direction = D3DXVECTOR3(1.0f, -1.0f, 0.0f);
-			device->SetLight(0, &light);
-			device->LightEnable(0, true);
-
-			D3DXCOLOR white(D3DCOLOR_XRGB(255, 255, 255));
-			D3DMATERIAL9 mtrl;
-			mtrl.Ambient = white;
-			mtrl.Diffuse = white;
-			mtrl.Emissive = D3DXCOLOR(D3DCOLOR_XRGB(0, 0, 0));
-			mtrl.Power = 2.0f;
-			mtrl.Specular = white;
-
-			device->SetMaterial(&mtrl);
-
-			//device->SetRenderState(D3DRS_NORMALIZENORMALS, true);
-			//device->SetRenderState(D3DRS_SPECULARENABLE, true);
-			//device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME); //填充方式，设置为网格
-			//device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 			device->SetRenderState(D3DRS_LIGHTING, false);
 			auto hr = device->DrawIndexedPrimitive(
 				D3DPT_TRIANGLELIST,
@@ -99,7 +75,7 @@ public:
 		}
 	}
 
-	void genTexture()
+	void genTexture(D3DXVECTOR3 *lightDirection)
 	{
 		auto texWidth = numCellsPerRow;
 		auto texHeight = numCellsPerCol;
@@ -139,13 +115,13 @@ public:
 				else if ((height) < 170.0f)  c = D3DUTILITY::DARK_YELLOW_GREEN;
 				else if ((height) < 212.5f)  c = D3DUTILITY::DARKBROWN;
 				else	                     c = D3DUTILITY::WHITE;
-
+				c = D3DUTILITY::WHITE;
 				imageData[i*lockedRect.Pitch / 4 + j] = static_cast<D3DCOLOR>(c);
 			}
 		}
 		tex->UnlockRect(0);
-		D3DXVECTOR3 lightDirection(0.0f, 1.0f, 0.0f);
-		lightTerrain(&lightDirection);
+		D3DXVec3Normalize(lightDirection, lightDirection);
+		lightTerrain(lightDirection);
 		D3DXFilterTexture(
 			tex,
 			0,
@@ -268,8 +244,8 @@ private:
 		D3DXVec3Cross(&n, &u, &v);
 		D3DXVec3Normalize(&n, &n);
 		auto cosine = D3DXVec3Dot(&n, directionToLight);
-		if (cosine < 0.0f)
-			cosine = 0.0f;
+		if (cosine < 0.8f)
+			cosine = 0.7f + 0.1f*cosine;
 		return cosine;
 	}
 

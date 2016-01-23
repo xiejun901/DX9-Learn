@@ -1,34 +1,40 @@
 #pragma once
 #include "d3dMainWindow.h"
-#include "Terrain.h"
+#include "SkyBox.h"
+#include "d3dUtility.h"
 #include "Camera.h"
-class TerrainWindow :
+#include "Terrain.h"
+class SkyBoxWindow :
 	public D3DMainWindow
 {
 public:
-	TerrainWindow();
-	TerrainWindow(const char *n, int w, int h) :D3DMainWindow(n, w, h) {
-
-	}
+	SkyBoxWindow();
+	SkyBoxWindow(const char *n, int w, int h):D3DMainWindow(n,w,h){}
 	void Setup() override
 	{
-		D3DXVECTOR3 lightDirection(0.0f, 1.0f, 0.0f);
-		terrain = new Terrain(pd3dDevice, "c.raw", 128, 128, 10, 1.0f);
-		terrain->loadTexture("snow.jpg");
-		//terrain->genTexture(&lightDirection);
-
-		pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+		sb = new SkyBox(pd3dDevice);
+		sb->loadBackTexture("fadeaway_bk.tga");
+		sb->loadFrontTexture("fadeaway_ft.tga");
+		sb->loadDownTexture("fadeaway_dn.tga");
+		sb->loadUpTexture("fadeaway_up.tga");
+		sb->loadLeftTexture("fadeaway_lf.tga");
+		sb->loadRightTexture("fadeaway_rt.tga");
 		pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+		pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 		pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
+		terrain = new Terrain(pd3dDevice, "c.raw", 128, 128, 10, 1.0f);
+		//terrain->loadTexture("fadeaway_dn.tga");
+		D3DXVECTOR3 lightDirection(0.0f, 1.0f, 1.0f);
+		terrain->genTexture(&lightDirection);
 		D3DXMATRIX proj;
 		D3DXMatrixPerspectiveFovLH(
 			&proj,
-			D3DX_PI * 0.25f, // 45 - degree
+			D3DX_PI * 0.5f, // 90 - degree
 			(float)width / (float)height,
 			1.0f,
-			1000.0f);
+			3000.0f);
 		pd3dDevice->SetTransform(D3DTS_PROJECTION, &proj);
+
 	}
 	void Cleanup() override
 	{
@@ -36,10 +42,8 @@ public:
 	}
 	bool Display(float timeDelta) override
 	{
-
 		if (pd3dDevice)
 		{
-
 			unsigned char keys[256];
 			GetKeyboardState(keys);
 
@@ -79,8 +83,10 @@ public:
 			D3DXMATRIX V;
 			camera.getViewMatrix(&V);
 			pd3dDevice->SetTransform(D3DTS_VIEW, &V);
-			pd3dDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(0.0f, 0.0f, 0.0f, 1.0f), 1.0f, 0);
+
+			pd3dDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, 0);
 			pd3dDevice->BeginScene();
+			sb->draw();
 			D3DXMATRIX I;
 			D3DXMatrixIdentity(&I);
 			terrain->draw(&I);
@@ -89,9 +95,13 @@ public:
 		}
 		return true;
 	}
-	~TerrainWindow();
+	~SkyBoxWindow()
+	{
+		delete sb;
+	}
 
-	Terrain *terrain;
+	SkyBox *sb;
 	Camera camera;
+	Terrain *terrain;
 };
 
