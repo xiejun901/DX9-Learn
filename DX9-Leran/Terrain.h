@@ -26,6 +26,8 @@ public:
 		numCellsPerRow = numVertsPerRow - 1;
 		width = numCellsPerRow * cellSpacing;
 		depth = numCellsPerCol * cellSpacing;
+		canArriveWidth = width - 5 * cellSpacing;
+		canArriveDepth = depth - 5 * cellSpacing;
 
 		numVertices = numVertsPerRow * numVertsPerCol;
 		numTriangles = numCellsPerRow * numCellsPerCol * 2;
@@ -127,6 +129,76 @@ public:
 			0,
 			0,
 			D3DX_DEFAULT);
+	}
+
+	float getHeight(float x, float z)
+	{
+		//caculate the position in terrain
+		x = static_cast<float>(width) / 2.0f + x;
+		z = static_cast<float>(depth) / 2.0f - z;
+		x /= static_cast<float>(cellSpacing);
+		z /= static_cast<float>(cellSpacing);
+
+		auto col = floorf(x);
+		auto row = floorf(z);
+		
+		/*
+		A -- B
+        |  / |	
+		C -- D
+		*/
+		auto A = getHeightMapEntry(static_cast<int>(row), static_cast<int>(col));
+		auto B = getHeightMapEntry(static_cast<int>(row), static_cast<int>(col) + 1);
+		auto C = getHeightMapEntry(static_cast<int>(row) + 1, static_cast<int>(col));
+		auto D = getHeightMapEntry(static_cast<int>(row) + 1, static_cast<int>(col) + 1);
+
+		auto dx = x - col;
+		auto dz = z - row;
+
+		auto height = 0.0f;
+		if (dz < 1.0f - dx)
+		{
+			auto uy = B - A;
+			auto vy = C - A;
+			height = A + uy * dx + vy * dz;
+		}
+		else
+		{
+			auto uy = C - D;
+			auto vy = B - D;
+			height = D + uy*(1 - dx) + vy*(1 - dz);
+		}
+		return height;
+	}
+
+	void transfrom(D3DXVECTOR3 *out, D3DXVECTOR3 *in)
+	{
+		if (in && out)
+		{
+			auto x = 0.0f;
+			auto y = 0.0f;
+			auto z = 0.0f;
+			if (in->x < -static_cast<float>(canArriveWidth) / 2)
+				x = -static_cast<float>(canArriveWidth) / 2.0f;
+			else if (in->x > static_cast<float>(canArriveWidth) / 2)
+				x = static_cast<float>(canArriveWidth) / 2;
+			else
+				x = in->x;
+			if (in->z < -static_cast<float>(canArriveDepth) / 2)
+				z = -static_cast<float>(canArriveDepth) / 2;
+			else if (in->z > static_cast<float>(canArriveDepth) / 2)
+				z = static_cast<float>(canArriveDepth) / 2;
+			else
+				z = in->z;
+			auto height = getHeight(x, z);
+			if (in->y < height + 5.0f)
+				y = height + 5.0f;
+			else
+				y = in->y;
+			out->x = x;
+			out->y = y;
+			out->z = z;
+		}
 	}
 private:
 	void readHeightMapRawFile(const std::string &fileName)
@@ -295,6 +367,8 @@ private:
 	// the width and depth of the height map
 	int width;
 	int depth;
+	int canArriveWidth;
+	int canArriveDepth;
 	int numVertices;
 	int numTriangles;
 
