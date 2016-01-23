@@ -84,11 +84,6 @@ public:
 			camera.getPosition(&pos);
 			terrain->transfrom(&pos, &pos);
 			camera.setPosition(&pos);
-			//D3DXVECTOR3 pos;
-			//camera.getPosition(&pos);
-			//float height = terrain->getHeight(pos.x, pos.z);
-			//pos.y = height + 5.0f; // add height because we're standing up
-			//camera.setPosition(&pos);
 
 			D3DXMATRIX V;
 			camera.getViewMatrix(&V);

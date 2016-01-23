@@ -47,7 +47,6 @@ public:
 			{ 1.0f, 1.0f, 1.0f,  0.0f,0.0f },
 			{ 1.0f,-1.0f, 1.0f,  0.0f,1.0f }
 		};
-		loadTexture("crate.jpg");
 		device->CreateVertexBuffer(
 			24 * sizeof(Vertex),
 			D3DUSAGE_WRITEONLY,
