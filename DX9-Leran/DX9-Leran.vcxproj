@@ -161,9 +161,12 @@
     <ClInclude Include="CameraWindow.h" />
     <ClInclude Include="ColorTriangle.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Dot3CubeWindow.h" />
     <ClInclude Include="LightWindow.h" />
+    <ClInclude Include="SceneWindow.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="SkyBoxWindow.h" />
+    <ClInclude Include="StoneWallCube.h" />
     <ClInclude Include="TeaPotWindow.h" />
     <ClInclude Include="d3dUtility.h" />
     <ClInclude Include="d3dMainWindow.h" />
@@ -177,9 +180,12 @@
     <ClCompile Include="ColorTrangle.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="d3dUtility.cpp" />
+    <ClCompile Include="Dot3CubeWindow.cpp" />
     <ClCompile Include="LightWindow.cpp" />
+    <ClCompile Include="SceneWindow.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="SkyBoxWindow.cpp" />
+    <ClCompile Include="StoneWallCube.cpp" />
     <ClCompile Include="TeaPotWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="d3dMainWindow.cpp" />

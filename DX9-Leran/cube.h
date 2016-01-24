@@ -131,8 +131,8 @@ public:
 	}
 	~Cube()
 	{
-		Release(vb);
-		Release(ib);
+		d3dUtil::Release(vb);
+		d3dUtil::Release(ib);
 	}
 private:
 	IDirect3DDevice9 *device;

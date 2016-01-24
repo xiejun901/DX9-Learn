@@ -83,7 +83,7 @@ public:
     ColorTrangle(const char *n, int w, int h):D3DMainWindow(n, w, h) {}
     ~ColorTrangle() 
     {
-        Release(triangle);
+        d3dUtil::Release(triangle);
     }
     IDirect3DVertexBuffer9 *triangle = 0;
 

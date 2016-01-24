@@ -111,13 +111,13 @@ public:
 			{
 				D3DXCOLOR c;
 				auto height = static_cast<float>(getHeightMapEntry(i, j))/heightScale;
-				if ((height) < 42.5f) 		 c = D3DUTILITY::BEACH_SAND;
-				else if ((height) < 85.0f)	 c = D3DUTILITY::LIGHT_YELLOW_GREEN;
-				else if ((height) < 127.5f)  c = D3DUTILITY::PUREGREEN;
-				else if ((height) < 170.0f)  c = D3DUTILITY::DARK_YELLOW_GREEN;
-				else if ((height) < 212.5f)  c = D3DUTILITY::DARKBROWN;
-				else	                     c = D3DUTILITY::WHITE;
-				c = D3DUTILITY::WHITE;
+				if ((height) < 42.5f) 		 c = d3dUtil::BEACH_SAND;
+				else if ((height) < 85.0f)	 c = d3dUtil::LIGHT_YELLOW_GREEN;
+				else if ((height) < 127.5f)  c = d3dUtil::PUREGREEN;
+				else if ((height) < 170.0f)  c = d3dUtil::DARK_YELLOW_GREEN;
+				else if ((height) < 212.5f)  c = d3dUtil::DARKBROWN;
+				else	                     c = d3dUtil::WHITE;
+				c = d3dUtil::WHITE;
 				imageData[i*lockedRect.Pitch / 4 + j] = static_cast<D3DCOLOR>(c);
 			}
 		}

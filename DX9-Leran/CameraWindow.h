@@ -79,7 +79,7 @@ public:
 	}
 	~CameraWindow()
 	{
-		Release(Teapot);
+		d3dUtil::Release(Teapot);
 	}
 
 	ID3DXMesh *Teapot = nullptr;

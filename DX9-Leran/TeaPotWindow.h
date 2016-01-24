@@ -58,9 +58,9 @@ public:
     }
     ~TeaPotWindow()
     {
-        Release(vb);
-        Release(ib);
-        Release(Teapot);
+        d3dUtil::Release(vb);
+		d3dUtil::Release(ib);
+		d3dUtil::Release(Teapot);
     }
 private:
     IDirect3DVertexBuffer9 *vb = nullptr;

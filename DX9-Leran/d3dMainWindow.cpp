@@ -187,7 +187,7 @@ LRESULT D3DMainWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 
 D3DMainWindow::~D3DMainWindow()
 {
-    Release(pD3D);
-    Release(pd3dDevice);
+	d3dUtil::Release(pD3D);
+	d3dUtil::Release(pd3dDevice);
     UnregisterClass(name, GetModuleHandle(NULL));
 }
