@@ -63,6 +63,12 @@
     <ClInclude Include="SceneWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SnowBoy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SnowBoyWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -114,6 +120,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SceneWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SnowBoy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SnowBoyWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

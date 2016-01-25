@@ -166,6 +166,8 @@
     <ClInclude Include="SceneWindow.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="SkyBoxWindow.h" />
+    <ClInclude Include="SnowBoy.h" />
+    <ClInclude Include="SnowBoyWindow.h" />
     <ClInclude Include="StoneWallCube.h" />
     <ClInclude Include="TeaPotWindow.h" />
     <ClInclude Include="d3dUtility.h" />
@@ -185,6 +187,8 @@
     <ClCompile Include="SceneWindow.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="SkyBoxWindow.cpp" />
+    <ClCompile Include="SnowBoy.cpp" />
+    <ClCompile Include="SnowBoyWindow.cpp" />
     <ClCompile Include="StoneWallCube.cpp" />
     <ClCompile Include="TeaPotWindow.cpp" />
     <ClCompile Include="main.cpp" />

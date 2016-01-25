@@ -10,12 +10,13 @@
 #include "SkyBoxWindow.h"
 #include "Dot3CubeWindow.h"
 #include "SceneWindow.h"
+#include "SnowBoyWindow.h"
 int WINAPI WinMain(HINSTANCE hInstance,
     HINSTANCE hPrevInstance,
     LPSTR     lpCmdLine,
     int       nCmdShow)
 {
-	SceneWindow app("WINDOW", 640, 480);
+    SceneWindow app("WINDOW", 640, 480);
     app.Init();
     app.Setup();
     app.run();   
