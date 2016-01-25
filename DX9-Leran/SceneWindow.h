@@ -39,8 +39,11 @@ public:
 		terrain->genTexture(&lightDirection);
 		auto initCameraPos = D3DXVECTOR3(-194.0f, 25.0f, -149.0f);
 		camera.setPosition(&initCameraPos);
-
-        snowboy = new SnowBoy(pd3dDevice, "snow.jpg", "snow.jpg");
+        snowboy = new SnowBoy(pd3dDevice, "snowhead.jpg", "snowbody.jpg");
+		D3DXMatrixTranslation(&matIniWorldSnowBoy, -194.0f, 35.0f, -149.0f);
+		D3DXMatrixTranslation(&matIniWorldCube,    -194.0f, 29.0f, -149.0f);
+		snowboy2 = new SnowBoy(pd3dDevice, "snowhead.jpg", "snowbody.jpg");
+		D3DXMatrixTranslation(&matIniWorldSnowBoy2, -174.0f, 25.0f, -159.0f);
 
 	}
 	void Cleanup() override
@@ -54,21 +57,18 @@ public:
             cameraControl(timeDelta, 10.0f);
 
 			static float fAngle = 0;
-			fAngle += 6 * timeDelta;
+			fAngle += 30 * timeDelta;
 			// Wrap it around, if it gets too big
 			while (fAngle > 360.0f) fAngle -= 360.0f;
 			while (fAngle < 0.0f)   fAngle += 360.0f;
 
 			D3DXMATRIX matTrans;
 			D3DXMATRIX matRot;
-			//Æ½ÒÆ¾ØÕó
-			D3DXMatrixTranslation(&matTrans, -194.0f, 25.0f, -149.0f);
 			//Ðý×ª¾ØÕó
 			D3DXMatrixRotationYawPitchRoll(&matRot,
 				D3DXToRadian(fAngle),
 				D3DXToRadian(0.0f),
 				0.0f);
-			auto matWorld = matRot * matTrans;
 
 			D3DXMATRIX V;
 			camera.getViewMatrix(&V);
@@ -82,11 +82,14 @@ public:
 			D3DXMatrixIdentity(&I);
 			skybox->draw();
 			terrain->draw(&I);
-			cube->draw(matWorld, lightPos);
-            D3DXMatrixTranslation(&matTrans, -184.0f, 25.0f, -149.0f);
-            matWorld = matRot * matTrans;
-            snowboy->draw(matWorld);
-            
+			auto matWorld = matRot * matIniWorldCube;
+			D3DXMATRIX matScale;
+			D3DXMatrixScaling(&matScale, 5.0f, 5.0f, 5.0f);
+			cube->draw(matScale*matWorld, lightPos);
+            matWorld = matRot * matIniWorldSnowBoy;
+			D3DXVECTOR3 lightDirection(0.0f, -1.0f, -1.0f);
+            snowboy->draw(matWorld, lightDirection);
+			snowboy2->draw(matIniWorldSnowBoy2, lightDirection);
 
 			pd3dDevice->EndScene();
 			pd3dDevice->Present(0, 0, 0, 0);
@@ -144,6 +147,10 @@ private:
 	SkyBox *skybox;
 	Terrain *terrain;
     SnowBoy *snowboy;
+	SnowBoy *snowboy2;
+	D3DXMATRIX matIniWorldSnowBoy;
+	D3DXMATRIX matIniWorldCube;
+	D3DXMATRIX matIniWorldSnowBoy2;
 
 
 };

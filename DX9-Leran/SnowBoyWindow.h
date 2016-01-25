@@ -40,7 +40,7 @@ public:
         camera.getViewMatrix(&V);
         pd3dDevice->SetTransform(D3DTS_VIEW, &V);
         pd3dDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(0.0f, 0.0f, 0.0f, 1.0f), 1.0f, 0);
-        snowBoy->draw(world);
+        snowBoy->draw(world, D3DXVECTOR3(1.0f, 1.0f, 1.0f));
         pd3dDevice->EndScene();
         pd3dDevice->Present(0, 0, 0, 0);
         return true;

@@ -316,8 +316,6 @@ private:
 		D3DXVec3Cross(&n, &u, &v);
 		D3DXVec3Normalize(&n, &n);
 		auto cosine = D3DXVec3Dot(&n, directionToLight);
-		if (cosine < 0.8f)
-			cosine = 0.7f + 0.1f*cosine;
 		return cosine;
 	}
 
@@ -343,7 +341,7 @@ private:
 			{
 				size_t index = i*lockedRec.Pitch / 4 + j;
 				D3DXCOLOR c(imageData[index]);
-				c *= caculateShade(i, j, directToLight);
+				c = c / 2.0f + c*caculateShade(i, j, directToLight) / 2.0f;
 				imageData[index] = static_cast<D3DCOLOR>(c);
 			}
 		}
