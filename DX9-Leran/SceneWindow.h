@@ -37,7 +37,7 @@ public:
 		//terrain->loadTexture("fadeaway_dn.tga");
 		D3DXVECTOR3 lightDirection(0.0f, 1.0f, 1.0f);
 		terrain->genTexture(&lightDirection);
-		auto initCameraPos = D3DXVECTOR3(-194.0f, 25.0f, -149.0f);
+		auto initCameraPos = D3DXVECTOR3(-144.0f, 25.0f, -156.0f);
 		camera.setPosition(&initCameraPos);
         snowboy = new SnowBoy(pd3dDevice, "snowhead.jpg", "snowbody.jpg");
 		D3DXMatrixTranslation(&matIniWorldSnowBoy, -194.0f, 35.0f, -149.0f);
@@ -54,21 +54,38 @@ public:
 	{
 		if (pd3dDevice)
 		{
+			D3DXVECTOR3 positionLast;
+			camera.getPosition(&positionLast);
             cameraControl(timeDelta, 10.0f);
-
-			static float fAngle = 0;
-			fAngle += 30 * timeDelta;
+			D3DXVECTOR3 positionNow;
+			camera.getPosition(&positionNow);
+			D3DXVECTOR3 look;
+			camera.getLook(&look);
+			//positionNow = positionNow + look;
+			//caculate the world transfer matrix of the object
+			static float fAngle = 180;
+			fAngle += 60 * timeDelta;
 			// Wrap it around, if it gets too big
 			while (fAngle > 360.0f) fAngle -= 360.0f;
 			while (fAngle < 0.0f)   fAngle += 360.0f;
-
-			D3DXMATRIX matTrans;
 			D3DXMATRIX matRot;
 			//Ðý×ª¾ØÕó
 			D3DXMatrixRotationYawPitchRoll(&matRot,
 				D3DXToRadian(fAngle),
 				D3DXToRadian(0.0f),
 				0.0f);
+			D3DXMATRIX I;
+			D3DXMatrixIdentity(&I);
+			D3DXMATRIX matScale;
+			D3DXMatrixScaling(&matScale, 5.0f, 5.0f, 5.0f);
+			auto matWorldCube = matScale * matRot * matIniWorldCube;
+			auto matWorldSnowBoy = matRot * matIniWorldSnowBoy;
+
+			//if (cube->positionInnerObject(matWorldCube, positionNow))
+			//	camera.setPosition(&positionLast);
+			auto distance = D3DXVec3Length(&(positionNow - cubeIniPosition));
+			if(distance < 10.2)
+				camera.setPosition(&positionLast);
 
 			D3DXMATRIX V;
 			camera.getViewMatrix(&V);
@@ -77,18 +94,15 @@ public:
 
 			D3DXVECTOR3 lightPos(0.0f, 10000.0f, 10000.0f);
 			pd3dDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(0.35f, 0.53f, 0.7, 1.0f), 1.0f, 0);
+
 			pd3dDevice->BeginScene();
-			D3DXMATRIX I;
-			D3DXMatrixIdentity(&I);
+			
 			skybox->draw();
 			terrain->draw(&I);
-			auto matWorld = matRot * matIniWorldCube;
-			D3DXMATRIX matScale;
-			D3DXMatrixScaling(&matScale, 5.0f, 5.0f, 5.0f);
-			cube->draw(matScale*matWorld, lightPos);
-            matWorld = matRot * matIniWorldSnowBoy;
+			cube->draw(matWorldCube, lightPos);
+            
 			D3DXVECTOR3 lightDirection(0.0f, -1.0f, -1.0f);
-            snowboy->draw(matWorld, lightDirection);
+            snowboy->draw(matWorldSnowBoy, lightDirection);
 			snowboy2->draw(matIniWorldSnowBoy2, lightDirection);
 
 			pd3dDevice->EndScene();
@@ -107,7 +121,6 @@ private:
     {
         unsigned char keys[256];
         GetKeyboardState(keys);
-
         // key W is Down
         if (keys['W'] & 0x80)
             camera.walk(moveVelocity*timeDelta);
@@ -148,6 +161,7 @@ private:
 	Terrain *terrain;
     SnowBoy *snowboy;
 	SnowBoy *snowboy2;
+	D3DXVECTOR3 cubeIniPosition = D3DXVECTOR3(-194.0f, 29.0f, -149.0f);
 	D3DXMATRIX matIniWorldSnowBoy;
 	D3DXMATRIX matIniWorldCube;
 	D3DXMATRIX matIniWorldSnowBoy2;

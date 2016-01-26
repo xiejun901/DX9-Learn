@@ -90,6 +90,28 @@ public:
 		pDevice->SetTexture(1, NULL);
 
 	}
+	/*
+	judge if the position inner the object
+	matWorld: the object's world taransfer
+	position: the position to be judged
+	*/
+	bool positionInnerObject(const D3DXMATRIX &matWorld, D3DXVECTOR3 position)
+	{
+		//transfer the potition to object's space
+		D3DXMATRIX worldInverse;
+		D3DXMatrixInverse(&worldInverse, NULL, &matWorld);
+		D3DXVec3TransformCoord(&position, &position, &worldInverse);
+		//if (abs(position.x) < 1.0f 
+		//	&& abs(position.y) < 1.0f 
+		//	&& abs(position.z) < 1.0f)
+		//	return true;
+		//return false;
+		auto length = D3DXVec3Length(&position);
+		if (length > 3.2)
+			return false;
+		return true;
+		
+	}
 	~StoneWallCube();
 
 private:
