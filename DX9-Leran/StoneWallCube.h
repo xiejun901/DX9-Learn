@@ -5,44 +5,39 @@
 #include <string>
 
 #include "d3dUtility.h"
+#include "ObjectBase.h"
 
-class StoneWallCube
+class StoneWallCube: public ObjectBase
 {
 public:
 	StoneWallCube(IDirect3DDevice9 *d, 
 		const std::string &nTexFileName, 
-		const std::string &texFileName):pDevice(d), textureFileName(texFileName), normalMapTextureFileName(nTexFileName){}
-	void init()
+		const std::string &texFileName):ObjectBase(d), textureFileName(texFileName), normalMapTextureFileName(nTexFileName){}
+
+	void init() override
 	{
 		loadTexture();
 		copyDataToVertexBuffer();
 		initialTangentVector();
 		computeTangentsMatricesForEachVertex();
 	}
-	void draw(const D3DXMATRIX &matWorld, const D3DXVECTOR3 &vLightPos)
+	void draw(D3DXMATRIX *matWorld = nullptr, D3DXVECTOR3 *lightDirection = nullptr) override
 	{
-		D3DXVECTOR3 vLightPosMS; // 局部坐标系中光源位置
-		D3DXVECTOR3 vVertToLightMS; // 局部坐标系中顶点到光源向量
+		D3DXVECTOR3 vVertToLightMS = -(*lightDirection); //世界坐标系中光线反方向
 		D3DXVECTOR3 vVertToLightTS; //法线坐标系中顶点到光源向量
 		// Transform the light's position into model-space
 		D3DXMATRIX worldInverse;
-		D3DXMatrixInverse(&worldInverse, NULL, &matWorld);
-		D3DXVec3TransformCoord(&vLightPosMS, &vLightPos, &worldInverse);
+		D3DXMatrixInverse(&worldInverse, NULL, matWorld);
+		D3DXVec3TransformNormal(&vVertToLightMS, &vVertToLightMS, &worldInverse);
 
 		Vertex *pVertices = NULL;
 		pVertexBuffer->Lock(0, 0, (void**)&pVertices, 0);
 		for (int i = 0; i < NUM_VERTICES; ++i)
 		{
-			D3DXVECTOR3 vCurrentVertex = D3DXVECTOR3(cubeVertices[i].x,
-				cubeVertices[i].y,
-				cubeVertices[i].z);
-
-			//光线位置减去当前点的位置，这个是指向光源的方向， 这个地方跟计算地形的着色那个是一样的
-			D3DXVECTOR3 vVertToLightMS = vLightPosMS - vCurrentVertex; 
 			//向量归一化
 			D3DXVec3Normalize(&vVertToLightMS, &vVertToLightMS);
 
-			//利用切向量，法向量，副法向量求法线坐标系中顶点到光源的向量
+			//利用切向量，法向量，副法向量求法线坐标系中光源方向
 			//                           Tangent           Binormal           Normal
 			D3DXMATRIX invTangentMatrix(vTangents[i].x, vBiNormals[i].x, vNormals[i].x, 0.0f,
 				vTangents[i].y, vBiNormals[i].y, vNormals[i].y, 0.0f,
@@ -51,11 +46,11 @@ public:
 
 			D3DXVec3TransformNormal(&vVertToLightTS, &vVertToLightMS, &invTangentMatrix);
 			//将向量转换为颜色值
-			pVertices[i].diffuse = encodeVectorAsDWORDColor(&vVertToLightTS);
+			pVertices[i].diffuse = encodeVectorAsDWORDColor(&vVertToLightTS, 0.77f);
 		}
 		pVertexBuffer->Unlock();
 
-		pDevice->SetTransform(D3DTS_WORLD, &matWorld);
+		pDevice->SetTransform(D3DTS_WORLD, matWorld);
 
 		pDevice->SetTexture(0, pNormalMapTexture);
 		//pDevice->SetTexture(0, pTexture);
@@ -90,33 +85,15 @@ public:
 		pDevice->SetTexture(1, NULL);
 
 	}
-	/*
-	judge if the position inner the object
-	matWorld: the object's world taransfer
-	position: the position to be judged
-	*/
-	bool positionInnerObject(const D3DXMATRIX &matWorld, D3DXVECTOR3 position)
+	~StoneWallCube()
 	{
-		//transfer the potition to object's space
-		D3DXMATRIX worldInverse;
-		D3DXMatrixInverse(&worldInverse, NULL, &matWorld);
-		D3DXVec3TransformCoord(&position, &position, &worldInverse);
-		//if (abs(position.x) < 1.0f 
-		//	&& abs(position.y) < 1.0f 
-		//	&& abs(position.z) < 1.0f)
-		//	return true;
-		//return false;
-		auto length = D3DXVec3Length(&position);
-		if (length > 3.2)
-			return false;
-		return true;
-		
+		d3dUtil::Release(pNormalMapTexture);
+		d3dUtil::Release(pTexture);
+		d3dUtil::Release(pVertexBuffer);
 	}
-	~StoneWallCube();
 
 private:
 	static const int NUM_VERTICES = 24;
-	IDirect3DDevice9 *pDevice;
 	IDirect3DTexture9 *pNormalMapTexture;
 	IDirect3DTexture9 *pTexture;
 	IDirect3DVertexBuffer9 *pVertexBuffer;
@@ -287,13 +264,13 @@ private:
 			vNormals[i + 3] = vNormal;
 		}
 	}
-	DWORD encodeVectorAsDWORDColor(D3DXVECTOR3* vVector)
+	DWORD encodeVectorAsDWORDColor(D3DXVECTOR3* vVector, float baseScale = 0.5f)
 	{
-		DWORD dwRed = (DWORD)(57 * vVector->x + 198);
-		DWORD dwGreen = (DWORD)(57 * vVector->y + 198);
-		DWORD dwBlue = (DWORD)(57 * vVector->z + 198);
-
-		return (DWORD)(0xff000000 + (dwRed << 16) + (dwGreen << 8) + dwBlue);
+		return D3DCOLOR_COLORVALUE(
+			baseScale + (1.0f - baseScale)*vVector->x, 
+			baseScale + (1.0f - baseScale)*vVector->y,
+			baseScale + (1.0f - baseScale)*vVector->z,
+			1.0f);
 	}
 	//顶点格式
 	struct Vertex

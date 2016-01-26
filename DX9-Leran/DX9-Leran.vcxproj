@@ -158,44 +158,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CameraWindow.h" />
-    <ClInclude Include="ColorTriangle.h" />
-    <ClInclude Include="Cube.h" />
-    <ClInclude Include="Dot3CubeWindow.h" />
-    <ClInclude Include="LightWindow.h" />
+    <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="SceneWindow.h" />
     <ClInclude Include="SkyBox.h" />
-    <ClInclude Include="SkyBoxWindow.h" />
     <ClInclude Include="SnowBoy.h" />
-    <ClInclude Include="SnowBoyWindow.h" />
     <ClInclude Include="StoneWallCube.h" />
-    <ClInclude Include="TeaPotWindow.h" />
     <ClInclude Include="d3dUtility.h" />
     <ClInclude Include="d3dMainWindow.h" />
     <ClInclude Include="Terrain.h" />
-    <ClInclude Include="TerrainWindow.h" />
-    <ClInclude Include="TextureWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CameraWindow.cpp" />
-    <ClCompile Include="ColorTrangle.cpp" />
-    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="d3dUtility.cpp" />
-    <ClCompile Include="Dot3CubeWindow.cpp" />
-    <ClCompile Include="LightWindow.cpp" />
+    <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="SceneWindow.cpp" />
     <ClCompile Include="SkyBox.cpp" />
-    <ClCompile Include="SkyBoxWindow.cpp" />
     <ClCompile Include="SnowBoy.cpp" />
-    <ClCompile Include="SnowBoyWindow.cpp" />
     <ClCompile Include="StoneWallCube.cpp" />
-    <ClCompile Include="TeaPotWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="d3dMainWindow.cpp" />
     <ClCompile Include="Terrain.cpp" />
-    <ClCompile Include="TerrainWindow.cpp" />
-    <ClCompile Include="TextureWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

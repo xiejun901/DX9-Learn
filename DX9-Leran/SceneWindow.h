@@ -23,13 +23,14 @@ public:
 
 		cube = new StoneWallCube(pd3dDevice, "stone_wall_normal_map.bmp", "stone_wall.bmp");
 		cube->init();
-		skybox = new SkyBox(pd3dDevice);
-		skybox->loadBackTexture("fadeaway_bk.tga");
-		skybox->loadFrontTexture("fadeaway_ft.tga");
-		skybox->loadDownTexture("fadeaway_dn.tga");
-		skybox->loadUpTexture("fadeaway_up.tga");
-		skybox->loadLeftTexture("fadeaway_lf.tga");
-		skybox->loadRightTexture("fadeaway_rt.tga");
+		skybox = new SkyBox(pd3dDevice, 
+			"fadeaway_up.tga", 
+			"fadeaway_dn.tga", 
+			"fadeaway_lf.tga", 
+			"fadeaway_rt.tga", 
+			"fadeaway_ft.tga", 
+			"fadeaway_bk.tga");
+		skybox->init();
 		pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 		pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 		pd3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
@@ -39,10 +40,12 @@ public:
 		terrain->genTexture(&lightDirection);
 		auto initCameraPos = D3DXVECTOR3(-144.0f, 25.0f, -156.0f);
 		camera.setPosition(&initCameraPos);
-        snowboy = new SnowBoy(pd3dDevice, "snowhead.jpg", "snowbody.jpg");
+        snowboy = new SnowBoy(pd3dDevice);
+		snowboy->init();
 		D3DXMatrixTranslation(&matIniWorldSnowBoy, -194.0f, 35.0f, -149.0f);
 		D3DXMatrixTranslation(&matIniWorldCube,    -194.0f, 29.0f, -149.0f);
-		snowboy2 = new SnowBoy(pd3dDevice, "snowhead.jpg", "snowbody.jpg");
+		snowboy2 = new SnowBoy(pd3dDevice);
+		snowboy2->init();
 		D3DXMatrixTranslation(&matIniWorldSnowBoy2, -174.0f, 25.0f, -159.0f);
 
 	}
@@ -64,7 +67,7 @@ public:
 			//positionNow = positionNow + look;
 			//caculate the world transfer matrix of the object
 			static float fAngle = 180;
-			fAngle += 60 * timeDelta;
+			//fAngle += 60 * timeDelta;
 			// Wrap it around, if it gets too big
 			while (fAngle > 360.0f) fAngle -= 360.0f;
 			while (fAngle < 0.0f)   fAngle += 360.0f;
@@ -91,19 +94,18 @@ public:
 			camera.getViewMatrix(&V);
 			pd3dDevice->SetTransform(D3DTS_VIEW, &V);
 
-
-			D3DXVECTOR3 lightPos(0.0f, 10000.0f, 10000.0f);
+			D3DXVECTOR3 lightDirection(0.0f, -1.0f, -1.0f);
 			pd3dDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLORVALUE(0.35f, 0.53f, 0.7, 1.0f), 1.0f, 0);
 
 			pd3dDevice->BeginScene();
 			
-			skybox->draw();
+			skybox->draw(&I);
 			terrain->draw(&I);
-			cube->draw(matWorldCube, lightPos);
+			cube->draw(&matWorldCube, &lightDirection);
             
-			D3DXVECTOR3 lightDirection(0.0f, -1.0f, -1.0f);
-            snowboy->draw(matWorldSnowBoy, lightDirection);
-			snowboy2->draw(matIniWorldSnowBoy2, lightDirection);
+
+            snowboy->draw(&matWorldSnowBoy, &lightDirection);
+			snowboy2->draw(&matIniWorldSnowBoy2, &lightDirection);
 
 			pd3dDevice->EndScene();
 			pd3dDevice->Present(0, 0, 0, 0);
@@ -162,6 +164,8 @@ private:
     SnowBoy *snowboy;
 	SnowBoy *snowboy2;
 	D3DXVECTOR3 cubeIniPosition = D3DXVECTOR3(-194.0f, 29.0f, -149.0f);
+	D3DXVECTOR3 snowBoy1Position = D3DXVECTOR3(-194.0f, 35.0f, -149.0f);
+	D3DXVECTOR3 snowBoy2Position = D3DXVECTOR3(-174.0f, 25.0f, -159.0f);
 	D3DXMATRIX matIniWorldSnowBoy;
 	D3DXMATRIX matIniWorldCube;
 	D3DXMATRIX matIniWorldSnowBoy2;
