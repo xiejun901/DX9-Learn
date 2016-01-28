@@ -86,10 +86,13 @@ public:
 
 			//if (cube->positionInnerObject(matWorldCube, positionNow))
 			//	camera.setPosition(&positionLast);
-			auto distance = D3DXVec3Length(&(positionNow - cubeIniPosition));
-			if(distance < 10.2)
+			//auto distance = D3DXVec3Length(&(positionNow - cubeIniPosition));
+			//if(distance < 10.2)
+			//	camera.setPosition(&positionLast);
+			if (checkCameraCollision(positionNow))
+			{
 				camera.setPosition(&positionLast);
-
+			}
 			D3DXMATRIX V;
 			camera.getViewMatrix(&V);
 			pd3dDevice->SetTransform(D3DTS_VIEW, &V);
@@ -116,11 +119,41 @@ public:
 	~SceneWindow()
 	{
 		delete cube;
+		delete snowboy;
+		delete snowboy2;
+		delete skybox;
+		delete terrain;
 	}
 
 private:
     void cameraControl(float timeDelta, float moveVelocity = 100.0f)
     {
+		POINT mousePosit;
+		GetCursorPos(&mousePosit);
+		ScreenToClient(hWnd, &mousePosit);
+		static POINT ptCurrentMousePosit;
+		static POINT ptLastMousePosit;
+		ptCurrentMousePosit.x = mousePosit.x;
+		ptCurrentMousePosit.y = mousePosit.y;
+
+		D3DXMATRIX matRotation;
+
+		if (bMousing)
+		{
+			int nXDiff = (ptCurrentMousePosit.x - ptLastMousePosit.x);
+			int nYDiff = (ptCurrentMousePosit.y - ptLastMousePosit.y);
+
+			if (nYDiff != 0)
+			{
+				camera.pitch(D3DXToRadian((float)nYDiff / 3.0f));
+			}
+
+			if (nXDiff != 0)
+			{
+				camera.yaw(D3DXToRadian((float)nXDiff / 3.0f));
+			}
+		}
+		ptLastMousePosit = ptCurrentMousePosit;
         unsigned char keys[256];
         GetKeyboardState(keys);
         // key W is Down
@@ -155,6 +188,18 @@ private:
 
         if (keys['E'] & 0x80)
             camera.fly(-moveVelocity * timeDelta);
+
+		D3DXVECTOR3 position;
+		camera.getPosition(&position);
+		position.y -= timeDelta;
+		camera.setPosition(&position);
+		//if (!(keys[VK_SPACE] & 0x80))
+		//{
+		//	D3DXVECTOR3 position;
+		//	camera.getPosition(&position);
+		//	terrain->transfrom(&position, &position);
+		//	camera.setPosition(&position);
+		//}
     }
 private:
 	StoneWallCube *cube;
@@ -163,12 +208,23 @@ private:
 	Terrain *terrain;
     SnowBoy *snowboy;
 	SnowBoy *snowboy2;
-	D3DXVECTOR3 cubeIniPosition = D3DXVECTOR3(-194.0f, 29.0f, -149.0f);
+	D3DXVECTOR3 cubeIniPosition  = D3DXVECTOR3(-194.0f, 29.0f, -149.0f);
 	D3DXVECTOR3 snowBoy1Position = D3DXVECTOR3(-194.0f, 35.0f, -149.0f);
 	D3DXVECTOR3 snowBoy2Position = D3DXVECTOR3(-174.0f, 25.0f, -159.0f);
 	D3DXMATRIX matIniWorldSnowBoy;
 	D3DXMATRIX matIniWorldCube;
 	D3DXMATRIX matIniWorldSnowBoy2;
+
+	bool checkCameraCollision(const D3DXVECTOR3 &cameraPositionNow)
+	{
+		auto terrainHeight = terrain->getHeight(cameraPositionNow.x, cameraPositionNow.z);
+		if (cameraPositionNow.y - terrainHeight < 2.0f)
+			return true;
+		auto distance = D3DXVec3Length(&(cameraPositionNow - cubeIniPosition));
+		if (distance < 10.2)
+			return true;
+		return false;
+	}
 
 
 };

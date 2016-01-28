@@ -35,7 +35,6 @@ public:
 		readHeightMapRawFile(heightmapFileName);
 		caculateVertices();
 		caculateIndices();
-
 	}
 
 	~Terrain();
@@ -62,7 +61,6 @@ public:
 			
 		}
 	}
-
 	void loadTexture(std::string fileName)
 	{
 		auto hr = D3DXCreateTextureFromFile(
@@ -191,10 +189,10 @@ public:
 			else
 				z = in->z;
 			auto height = getHeight(x, z);
-			if (in->y < height + 5.0f)
+			//if (in->y < height + 5.0f)
 				y = height + 5.0f;
-			else
-				y = in->y;
+			//else
+			//	y = in->y;
 			out->x = x;
 			out->y = y;
 			out->z = z;

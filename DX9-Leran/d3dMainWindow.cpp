@@ -1,5 +1,7 @@
 #include "d3dMainWindow.h"
 #include "d3dUtility.h"
+
+bool D3DMainWindow::bMousing = false;
 void D3DMainWindow::Init()
 {
     if (!InitWindow())
@@ -179,6 +181,17 @@ LRESULT D3DMainWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			break;
 		}
 		break;
+	case WM_LBUTTONDOWN:
+	{
+		bMousing = true;
+	}
+	break;
+
+	case WM_LBUTTONUP:
+	{
+		bMousing = false;
+	}
+	break;
 	default:
 		break;
 	}
