@@ -5,6 +5,11 @@
 class Camera
 {
 public:
+    enum CameraType
+    {
+        LANDOBJECT,
+        AIRCRAFT
+    };
 	Camera();
 	void strafe(float units);
 	void fly(float units);
@@ -28,6 +33,7 @@ private:
 	D3DXVECTOR3 _up;
 	D3DXVECTOR3 _look;
 	D3DXVECTOR3 _pos;
+    CameraType cameraType;
 };
 
 

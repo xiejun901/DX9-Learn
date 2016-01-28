@@ -66,7 +66,7 @@ public:
 			camera.getLook(&look);
 			//positionNow = positionNow + look;
 			//caculate the world transfer matrix of the object
-			static float fAngle = 180;
+			static float fAngle = 0;
 			//fAngle += 60 * timeDelta;
 			// Wrap it around, if it gets too big
 			while (fAngle > 360.0f) fAngle -= 360.0f;
@@ -190,16 +190,40 @@ private:
             camera.fly(-moveVelocity * timeDelta);
 
 		D3DXVECTOR3 position;
-		camera.getPosition(&position);
-		position.y -= timeDelta;
-		camera.setPosition(&position);
-		//if (!(keys[VK_SPACE] & 0x80))
-		//{
-		//	D3DXVECTOR3 position;
-		//	camera.getPosition(&position);
-		//	terrain->transfrom(&position, &position);
-		//	camera.setPosition(&position);
-		//}
+		//camera.getPosition(&position);
+		////position.y -= timeDelta;
+  //      terrain->transfrom(&position, &position);
+		//camera.setPosition(&position);
+		if (!(keys[VK_SPACE] & 0x80))
+		{
+			//D3DXVECTOR3 position;
+			//camera.getPosition(&position);
+			//terrain->transfrom(&position, &position);
+			//camera.setPosition(&position);
+            //camera.getPosition(&position);
+            //position.y -= timeDelta;
+            //terrain->transfrom(&position, &position);
+            //camera.setPosition(&position);
+            //camera.getPosition(&position);
+            ////position.y -= timeDelta;
+            // terrain->transfrom(&position, &position);
+            //camera.setPosition(&position);
+            D3DXVECTOR3 position;
+            camera.getPosition(&position);
+            position.y -= 50*timeDelta;
+            camera.setPosition(&position);
+            auto height = terrain->getHeight(position.x,position.z);
+            if (position.y < height + 5.0f)
+                position.y = height + 5.0f;
+            camera.setPosition(&position);
+		}
+        else
+        {
+            D3DXVECTOR3 position;
+            camera.getPosition(&position);
+            position.y += 20 * timeDelta;
+            camera.setPosition(&position);
+        }
     }
 private:
 	StoneWallCube *cube;
@@ -217,13 +241,20 @@ private:
 
 	bool checkCameraCollision(const D3DXVECTOR3 &cameraPositionNow)
 	{
-		auto terrainHeight = terrain->getHeight(cameraPositionNow.x, cameraPositionNow.z);
-		if (cameraPositionNow.y - terrainHeight < 2.0f)
-			return true;
-		auto distance = D3DXVec3Length(&(cameraPositionNow - cubeIniPosition));
-		if (distance < 10.2)
-			return true;
-		return false;
+		//auto terrainHeight = terrain->getHeight(cameraPositionNow.x, cameraPositionNow.z);
+		//if (cameraPositionNow.y - terrainHeight < 2.0f)
+		//	return true;
+		//auto distance = D3DXVec3Length(&(cameraPositionNow - cubeIniPosition));
+		//if (distance < 10.2)
+		//	return true;
+		//return false;
+        auto cubeX = D3DXVECTOR3(5.0f, 0.0f, 0.0f) + cubeIniPosition;
+        auto cubeY = D3DXVECTOR3(0.0f, 5.0f, 0.0f) + cubeIniPosition;
+        auto cubeZ = D3DXVECTOR3(0.0f, 0.0f, 5.0f) + cubeIniPosition;
+        D3DXVECTOR3 position;
+        camera.getPosition(&position);
+        return d3dUtil::checkIntersectionBoxSphere(cubeIniPosition, cubeX, cubeY, cubeZ, position, 1.0f);
+        
 	}
 
 

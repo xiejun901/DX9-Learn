@@ -1,4 +1,5 @@
 #include "d3dUtility.h"
+#include <algorithm>
 
 void d3dUtil::createTangentSpaceVectors(D3DXVECTOR3 * v1, D3DXVECTOR3 * v2, D3DXVECTOR3 * v3, float v1u, float v1v, float v2u, float v2v, float v3u, float v3v, D3DXVECTOR3 * vTangent, D3DXVECTOR3 * vBiNormal, D3DXVECTOR3 * vNormal)
 {
@@ -92,4 +93,56 @@ void d3dUtil::createTangentSpaceVectors(D3DXVECTOR3 * v1, D3DXVECTOR3 * v2, D3DX
 		//
 		//*vBiNormal = *vBiNormal * -1.0f;
 	}
+}
+
+bool d3dUtil::checkIntersectionBoxSphere(const D3DXVECTOR3 & boxCenter, const D3DXVECTOR3 & boxX, const D3DXVECTOR3 & boxY, const D3DXVECTOR3 & boxZ, const D3DXVECTOR3 & sphereCenter, float radius)
+{
+    //计算需要将正方体摆正需要的矩阵
+    //构造观察矩阵
+    D3DXVECTOR3 vx, vy, vz;
+    D3DXVec3Normalize(&vx, &boxX);
+    D3DXVec3Normalize(&vy, &boxY);
+    D3DXVec3Normalize(&vz, &boxZ);
+    auto x = -D3DXVec3Dot(&vx, &boxCenter);
+    auto y = -D3DXVec3Dot(&vy, &boxCenter);
+    auto z = -D3DXVec3Dot(&vz, &boxCenter);
+    D3DXMATRIX mat;
+    mat(0, 0) = vx.x;
+    mat(0, 1) = vy.x;
+    mat(0, 2) = vz.x;
+    mat(0, 3) = 0.0f;
+
+    mat(1, 0) = vx.y;
+    mat(1, 1) = vy.y;
+    mat(1, 2) = vz.y;
+    mat(1, 3) = 0.0f;
+
+    mat(2, 0) = vx.z;
+    mat(2, 1) = vy.z;
+    mat(2, 2) = vz.z;
+    mat(2, 3) = 0.0f;
+
+    mat(3, 0) = x;
+    mat(3, 1) = y;
+    mat(3, 2) = z;
+    mat(3, 3) = 1.0f;
+
+
+    D3DXVECTOR3 vh(boxX.x, boxY.y, boxZ.z);
+    D3DXVec3TransformCoord(&vh, &vh, &mat);
+
+    D3DXVECTOR3 vc;
+    D3DXVec3TransformCoord(&vc, &sphereCenter, &mat);
+    vc.x = std::abs(vc.x);
+    vc.y = std::abs(vc.y);
+    vc.z = std::abs(vc.z);
+    auto u = vc - vh;
+    if (u.x < 0)
+        u.x = 0;
+    if (u.y < 0)
+        u.y = 0;
+    if (u.z < 0)
+        u.z = 0;
+    
+    return D3DXVec3Length(&u) < radius;
 }

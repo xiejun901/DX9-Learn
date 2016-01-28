@@ -81,6 +81,15 @@ namespace d3dUtil {
 		D3DXVECTOR3 *vBiNormal,
 		D3DXVECTOR3 *vNormal);
 
+
+    //Box-Sphere Intersection
+    bool checkIntersectionBoxSphere(const D3DXVECTOR3 &boxCenter,
+        const D3DXVECTOR3 &boxSide1,
+        const D3DXVECTOR3 &boxSide2,
+        const D3DXVECTOR3 &boxSide3,
+        const D3DXVECTOR3 &sphereCenter,
+        float radius);
+
 }
 
 #endif

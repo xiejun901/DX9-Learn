@@ -3,23 +3,33 @@
 Camera::Camera():_look(D3DXVECTOR3(0.0f,0.0f,1.0f)),
 _right(D3DXVECTOR3(1.0f, 0.0f,0.0f)),
 _up(D3DXVECTOR3(0.0f,1.0f,0.0f)),
-_pos(D3DXVECTOR3(0.0f,0.0f,0.0f))
+_pos(D3DXVECTOR3(0.0f,0.0f,0.0f)),
+cameraType(LANDOBJECT)
 {
 }
 
 void Camera::strafe(float units)
 {
-	_pos += _right * units;
+    if(cameraType == LANDOBJECT)
+        _pos += D3DXVECTOR3(_right.x, 0.0f, _right.z) * units;
+    if (cameraType == AIRCRAFT)
+	    _pos += _right * units;
 }
 
 void Camera::fly(float units)
 {
-	_pos += _up*units;
+    if(cameraType == LANDOBJECT)
+        _pos.y += units;
+    if(cameraType == AIRCRAFT)
+	    _pos += _up*units;
 }
 
 void Camera::walk(float units)
 {
-	_pos += _look*units;
+    if(cameraType == LANDOBJECT)
+        _pos += D3DXVECTOR3(_look.x, 0.0f, _look.z) * units;
+    if(cameraType == AIRCRAFT)
+	    _pos += _look*units;
 }
 
 void Camera::pitch(float angle)
