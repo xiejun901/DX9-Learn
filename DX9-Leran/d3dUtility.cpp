@@ -99,10 +99,18 @@ bool d3dUtil::checkIntersectionBoxSphere(const D3DXVECTOR3 & boxCenter, const D3
 {
     //计算需要将正方体摆正需要的矩阵
     //构造观察矩阵
-    D3DXVECTOR3 vx, vy, vz;
-    D3DXVec3Normalize(&vx, &boxX);
-    D3DXVec3Normalize(&vy, &boxY);
-    D3DXVec3Normalize(&vz, &boxZ);
+    D3DXVECTOR3 vx = boxX, vy= boxY, vz = boxZ;
+    //D3DXVec3Normalize(&vx, &boxX);
+    //D3DXVec3Normalize(&vy, &boxY);
+    //D3DXVec3Normalize(&vz, &boxZ);
+	D3DXVec3Normalize(&vz, &vz);
+
+	D3DXVec3Cross(&vy, &vz, &vx);
+	D3DXVec3Normalize(&vy, &vy);
+
+	D3DXVec3Cross(&vx, &vy, &vz);
+	D3DXVec3Normalize(&vx, &vx);
+
     auto x = -D3DXVec3Dot(&vx, &boxCenter);
     auto y = -D3DXVec3Dot(&vy, &boxCenter);
     auto z = -D3DXVec3Dot(&vz, &boxCenter);
@@ -128,11 +136,17 @@ bool d3dUtil::checkIntersectionBoxSphere(const D3DXVECTOR3 & boxCenter, const D3
     mat(3, 3) = 1.0f;
 
 
-    D3DXVECTOR3 vh(boxX.x, boxY.y, boxZ.z);
-    D3DXVec3TransformCoord(&vh, &vh, &mat);
+   // D3DXVECTOR3 vh(boxX.x, boxY.y, boxZ.z);
+    D3DXVec3TransformNormal(&vx, &boxX, &mat);
+	D3DXVec3TransformNormal(&vy, &boxY, &mat);
+	D3DXVec3TransformNormal(&vz, &boxZ, &mat);
+	//D3DXVec3TransformNormal(&vh, &vh, &mat);
+	auto vh = vx + vy + vz;
 
     D3DXVECTOR3 vc;
     D3DXVec3TransformCoord(&vc, &sphereCenter, &mat);
+	D3DXVECTOR3 cc;
+	D3DXVec3TransformCoord(&cc, &boxCenter, &mat);
     vc.x = std::abs(vc.x);
     vc.y = std::abs(vc.y);
     vc.z = std::abs(vc.z);

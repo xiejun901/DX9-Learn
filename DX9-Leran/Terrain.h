@@ -198,6 +198,14 @@ public:
 			out->z = z;
 		}
 	}
+	bool intersection(const D3DXVECTOR3 &positon, double radius)
+	{
+		auto height = getHeight(positon.x, positon.z);
+		if (positon.y - height < radius)
+			return true;
+		else
+			return false;
+	}
 private:
 	void readHeightMapRawFile(const std::string &fileName)
 	{

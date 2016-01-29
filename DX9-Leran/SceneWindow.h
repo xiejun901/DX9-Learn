@@ -21,7 +21,7 @@ public:
 			3000.0f);
 		pd3dDevice->SetTransform(D3DTS_PROJECTION, &proj);
 
-		cube = new StoneWallCube(pd3dDevice, "stone_wall_normal_map.bmp", "stone_wall.bmp");
+		cube = new StoneWallCube(pd3dDevice, "stone_wall_normal_map.bmp", "stone_wall.bmp", 15.0f);
 		cube->init();
 		skybox = new SkyBox(pd3dDevice, 
 			"fadeaway_up.tga", 
@@ -38,7 +38,7 @@ public:
 		//terrain->loadTexture("fadeaway_dn.tga");
 		D3DXVECTOR3 lightDirection(0.0f, 1.0f, 1.0f);
 		terrain->genTexture(&lightDirection);
-		auto initCameraPos = D3DXVECTOR3(-144.0f, 25.0f, -156.0f);
+		auto initCameraPos = D3DXVECTOR3(cubeIniPosition.x, cubeIniPosition.y, cubeIniPosition.z+10.0f);
 		camera.setPosition(&initCameraPos);
         snowboy = new SnowBoy(pd3dDevice);
 		snowboy->init();
@@ -57,17 +57,9 @@ public:
 	{
 		if (pd3dDevice)
 		{
-			D3DXVECTOR3 positionLast;
-			camera.getPosition(&positionLast);
             cameraControl(timeDelta, 10.0f);
-			D3DXVECTOR3 positionNow;
-			camera.getPosition(&positionNow);
-			D3DXVECTOR3 look;
-			camera.getLook(&look);
-			//positionNow = positionNow + look;
-			//caculate the world transfer matrix of the object
-			static float fAngle = 0;
-			//fAngle += 60 * timeDelta;
+			static float fAngle = 45.0f;
+			fAngle += 60 * timeDelta;
 			// Wrap it around, if it gets too big
 			while (fAngle > 360.0f) fAngle -= 360.0f;
 			while (fAngle < 0.0f)   fAngle += 360.0f;
@@ -79,20 +71,9 @@ public:
 				0.0f);
 			D3DXMATRIX I;
 			D3DXMatrixIdentity(&I);
-			D3DXMATRIX matScale;
-			D3DXMatrixScaling(&matScale, 5.0f, 5.0f, 5.0f);
-			auto matWorldCube = matScale * matRot * matIniWorldCube;
+			auto matWorldCube = matRot * matIniWorldCube;
 			auto matWorldSnowBoy = matRot * matIniWorldSnowBoy;
 
-			//if (cube->positionInnerObject(matWorldCube, positionNow))
-			//	camera.setPosition(&positionLast);
-			//auto distance = D3DXVec3Length(&(positionNow - cubeIniPosition));
-			//if(distance < 10.2)
-			//	camera.setPosition(&positionLast);
-			if (checkCameraCollision(positionNow))
-			{
-				camera.setPosition(&positionLast);
-			}
 			D3DXMATRIX V;
 			camera.getViewMatrix(&V);
 			pd3dDevice->SetTransform(D3DTS_VIEW, &V);
@@ -105,7 +86,10 @@ public:
 			skybox->draw(&I);
 			terrain->draw(&I);
 			cube->draw(&matWorldCube, &lightDirection);
-            
+			D3DXVec3TransformNormal(&cubeX, &cubeXIni, &matRot);
+			D3DXVec3TransformNormal(&cubeY, &cubeYIni, &matRot);
+			D3DXVec3TransformNormal(&cubeZ, &cubeZIni, &matRot);
+
 
             snowboy->draw(&matWorldSnowBoy, &lightDirection);
 			snowboy2->draw(&matIniWorldSnowBoy2, &lightDirection);
@@ -128,6 +112,8 @@ public:
 private:
     void cameraControl(float timeDelta, float moveVelocity = 100.0f)
     {
+		D3DXVECTOR3 positionLast;
+		camera.getPosition(&positionLast);
 		POINT mousePosit;
 		GetCursorPos(&mousePosit);
 		ScreenToClient(hWnd, &mousePosit);
@@ -189,42 +175,40 @@ private:
         if (keys['E'] & 0x80)
             camera.fly(-moveVelocity * timeDelta);
 
-		D3DXVECTOR3 position;
-		//camera.getPosition(&position);
-		////position.y -= timeDelta;
-  //      terrain->transfrom(&position, &position);
-		//camera.setPosition(&position);
 		if (!(keys[VK_SPACE] & 0x80))
 		{
-			//D3DXVECTOR3 position;
-			//camera.getPosition(&position);
-			//terrain->transfrom(&position, &position);
-			//camera.setPosition(&position);
-            //camera.getPosition(&position);
-            //position.y -= timeDelta;
-            //terrain->transfrom(&position, &position);
-            //camera.setPosition(&position);
-            //camera.getPosition(&position);
-            ////position.y -= timeDelta;
-            // terrain->transfrom(&position, &position);
-            //camera.setPosition(&position);
-            D3DXVECTOR3 position;
-            camera.getPosition(&position);
-            position.y -= 50*timeDelta;
-            camera.setPosition(&position);
-            auto height = terrain->getHeight(position.x,position.z);
-            if (position.y < height + 5.0f)
-                position.y = height + 5.0f;
-            camera.setPosition(&position);
+			D3DXVECTOR3 position;
+			camera.getPosition(&position);
+			if (terrain->intersection(position, 5.0f))
+			{
+				camera.fly(0.3f);
+				camera.getPosition(&position);
+				if (terrain->intersection(position, 5.0f))
+				{
+					camera.setPosition(&positionLast);
+				}
+			}
+			if(checkCameraCollision(position))
+				camera.setPosition(&positionLast);
+			if (canFallDown())
+			{
+				camera.fly(-0.3f);
+			}
 		}
         else
         {
             D3DXVECTOR3 position;
             camera.getPosition(&position);
-            position.y += 20 * timeDelta;
+            position.y += 40.0f * timeDelta;
             camera.setPosition(&position);
         }
     }
+	bool canFallDown()
+	{
+		D3DXVECTOR3 position;
+		camera.getPosition(&position);
+		return !(d3dUtil::checkIntersectionBoxSphere(cubeIniPosition, cubeX, cubeY, cubeZ, position, 2.5f) || terrain->intersection(position, 6.0f));
+	}
 private:
 	StoneWallCube *cube;
 	Camera camera;
@@ -238,23 +222,19 @@ private:
 	D3DXMATRIX matIniWorldSnowBoy;
 	D3DXMATRIX matIniWorldCube;
 	D3DXMATRIX matIniWorldSnowBoy2;
+	D3DXVECTOR3 cubeX = D3DXVECTOR3(5.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 cubeY = D3DXVECTOR3(0.0f, 5.0f, 0.0f);
+	D3DXVECTOR3 cubeZ = D3DXVECTOR3(0.0f, 0.0f, 5.0f);
+	//立方体初始XYZ轴向量
+	D3DXVECTOR3 cubeXIni = D3DXVECTOR3(15.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 cubeYIni = D3DXVECTOR3(0.0f, 15.0f, 0.0f);
+	D3DXVECTOR3 cubeZIni = D3DXVECTOR3(0.0f, 0.0f, 15.0f);
 
 	bool checkCameraCollision(const D3DXVECTOR3 &cameraPositionNow)
 	{
-		//auto terrainHeight = terrain->getHeight(cameraPositionNow.x, cameraPositionNow.z);
-		//if (cameraPositionNow.y - terrainHeight < 2.0f)
-		//	return true;
-		//auto distance = D3DXVec3Length(&(cameraPositionNow - cubeIniPosition));
-		//if (distance < 10.2)
-		//	return true;
-		//return false;
-        auto cubeX = D3DXVECTOR3(5.0f, 0.0f, 0.0f) + cubeIniPosition;
-        auto cubeY = D3DXVECTOR3(0.0f, 5.0f, 0.0f) + cubeIniPosition;
-        auto cubeZ = D3DXVECTOR3(0.0f, 0.0f, 5.0f) + cubeIniPosition;
         D3DXVECTOR3 position;
         camera.getPosition(&position);
-        return d3dUtil::checkIntersectionBoxSphere(cubeIniPosition, cubeX, cubeY, cubeZ, position, 1.0f);
-        
+        return d3dUtil::checkIntersectionBoxSphere(cubeIniPosition, cubeX, cubeY, cubeZ, position, 1.7f);    
 	}
 
 

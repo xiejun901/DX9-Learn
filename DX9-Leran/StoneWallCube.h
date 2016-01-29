@@ -12,10 +12,12 @@ class StoneWallCube: public ObjectBase
 public:
 	StoneWallCube(IDirect3DDevice9 *d, 
 		const std::string &nTexFileName, 
-		const std::string &texFileName):ObjectBase(d), textureFileName(texFileName), normalMapTextureFileName(nTexFileName){}
+		const std::string &texFileName,
+		float l = 1.0f):ObjectBase(d), textureFileName(texFileName), normalMapTextureFileName(nTexFileName), length(l){}
 
 	void init() override
 	{
+		D3DXMatrixScaling(&matScale, length, length, length);
 		loadTexture();
 		copyDataToVertexBuffer();
 		initialTangentVector();
@@ -23,6 +25,7 @@ public:
 	}
 	void draw(D3DXMATRIX *matWorld = nullptr, D3DXVECTOR3 *lightDirection = nullptr) override
 	{
+		matWorldTrans = *matWorld;
 		D3DXVECTOR3 vVertToLightMS = -(*lightDirection); //世界坐标系中光线反方向
 		D3DXVECTOR3 vVertToLightTS; //法线坐标系中顶点到光源向量
 		// Transform the light's position into model-space
@@ -50,7 +53,8 @@ public:
 		}
 		pVertexBuffer->Unlock();
 
-		pDevice->SetTransform(D3DTS_WORLD, matWorld);
+		auto world = matScale*(*matWorld);
+		pDevice->SetTransform(D3DTS_WORLD, &world);
 
 		pDevice->SetTexture(0, pNormalMapTexture);
 		//pDevice->SetTexture(0, pTexture);
@@ -85,6 +89,10 @@ public:
 		pDevice->SetTexture(1, NULL);
 
 	}
+	bool collisionWithSphere(const D3DXVECTOR3 &sphereCenter, float radius)
+	{
+
+	}
 	~StoneWallCube()
 	{
 		d3dUtil::Release(pNormalMapTexture);
@@ -101,9 +109,14 @@ private:
 	std::string normalMapTextureFileName;
 	std::string textureFileName;
 
+	float length;
+	D3DXMATRIX matScale;
+
+
 	D3DXVECTOR3 vTangents[NUM_VERTICES];
 	D3DXVECTOR3 vBiNormals[NUM_VERTICES];
 	D3DXVECTOR3 vNormals[NUM_VERTICES];
+
 
 	void loadTexture()
 	{
