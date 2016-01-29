@@ -217,7 +217,7 @@ private:
     SnowBoy *snowboy;
 	SnowBoy *snowboy2;
 	D3DXVECTOR3 cubeIniPosition  = D3DXVECTOR3(-194.0f, 35.0f, -149.0f);
-	D3DXVECTOR3 snowBoy1Position = D3DXVECTOR3(-194.0f, 35.0f, -149.0f);
+	D3DXVECTOR3 snowBoy1Position = D3DXVECTOR3(-194.0f, 43.0f, -149.0f);
 	D3DXVECTOR3 snowBoy2Position = D3DXVECTOR3(-174.0f, 25.0f, -159.0f);
 	D3DXMATRIX matIniWorldSnowBoy;
 	D3DXMATRIX matIniWorldCube;
