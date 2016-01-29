@@ -21,7 +21,7 @@ public:
 			3000.0f);
 		pd3dDevice->SetTransform(D3DTS_PROJECTION, &proj);
 
-		cube = new StoneWallCube(pd3dDevice, "stone_wall_normal_map.bmp", "stone_wall.bmp", 15.0f);
+		cube = new StoneWallCube(pd3dDevice, "stone_wall_normal_map.bmp", "stone_wall.bmp", 10.0f);
 		cube->init();
 		skybox = new SkyBox(pd3dDevice, 
 			"fadeaway_up.tga", 
@@ -42,11 +42,11 @@ public:
 		camera.setPosition(&initCameraPos);
         snowboy = new SnowBoy(pd3dDevice);
 		snowboy->init();
-		D3DXMatrixTranslation(&matIniWorldSnowBoy, -194.0f, 35.0f, -149.0f);
-		D3DXMatrixTranslation(&matIniWorldCube,    -194.0f, 29.0f, -149.0f);
+		D3DXMatrixTranslation(&matIniWorldSnowBoy, snowBoy1Position.x, snowBoy1Position.y, snowBoy1Position.z);
+		D3DXMatrixTranslation(&matIniWorldCube, cubeIniPosition.x, cubeIniPosition.y, cubeIniPosition.z);
 		snowboy2 = new SnowBoy(pd3dDevice);
 		snowboy2->init();
-		D3DXMatrixTranslation(&matIniWorldSnowBoy2, -174.0f, 25.0f, -159.0f);
+		D3DXMatrixTranslation(&matIniWorldSnowBoy2, snowBoy2Position.x, snowBoy2Position.y, snowBoy2Position.z);
 
 	}
 	void Cleanup() override
@@ -86,10 +86,10 @@ public:
 			skybox->draw(&I);
 			terrain->draw(&I);
 			cube->draw(&matWorldCube, &lightDirection);
-			D3DXVec3TransformNormal(&cubeX, &cubeXIni, &matRot);
-			D3DXVec3TransformNormal(&cubeY, &cubeYIni, &matRot);
-			D3DXVec3TransformNormal(&cubeZ, &cubeZIni, &matRot);
 
+            D3DXVec3TransformNormal(&cubeX, &cubeXIni, &matRot);
+            D3DXVec3TransformNormal(&cubeY, &cubeYIni, &matRot);
+            D3DXVec3TransformNormal(&cubeZ, &cubeZIni, &matRot);
 
             snowboy->draw(&matWorldSnowBoy, &lightDirection);
 			snowboy2->draw(&matIniWorldSnowBoy2, &lightDirection);
@@ -216,19 +216,19 @@ private:
 	Terrain *terrain;
     SnowBoy *snowboy;
 	SnowBoy *snowboy2;
-	D3DXVECTOR3 cubeIniPosition  = D3DXVECTOR3(-194.0f, 29.0f, -149.0f);
+	D3DXVECTOR3 cubeIniPosition  = D3DXVECTOR3(-194.0f, 35.0f, -149.0f);
 	D3DXVECTOR3 snowBoy1Position = D3DXVECTOR3(-194.0f, 35.0f, -149.0f);
 	D3DXVECTOR3 snowBoy2Position = D3DXVECTOR3(-174.0f, 25.0f, -159.0f);
 	D3DXMATRIX matIniWorldSnowBoy;
 	D3DXMATRIX matIniWorldCube;
 	D3DXMATRIX matIniWorldSnowBoy2;
-	D3DXVECTOR3 cubeX = D3DXVECTOR3(5.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 cubeY = D3DXVECTOR3(0.0f, 5.0f, 0.0f);
-	D3DXVECTOR3 cubeZ = D3DXVECTOR3(0.0f, 0.0f, 5.0f);
+	D3DXVECTOR3 cubeX = D3DXVECTOR3(10.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 cubeY = D3DXVECTOR3(0.0f, 10.0f, 0.0f);
+	D3DXVECTOR3 cubeZ = D3DXVECTOR3(0.0f, 0.0f, 10.0f);
 	//立方体初始XYZ轴向量
-	D3DXVECTOR3 cubeXIni = D3DXVECTOR3(15.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 cubeYIni = D3DXVECTOR3(0.0f, 15.0f, 0.0f);
-	D3DXVECTOR3 cubeZIni = D3DXVECTOR3(0.0f, 0.0f, 15.0f);
+	D3DXVECTOR3 cubeXIni = D3DXVECTOR3(10.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 cubeYIni = D3DXVECTOR3(0.0f, 10.0f, 0.0f);
+	D3DXVECTOR3 cubeZIni = D3DXVECTOR3(0.0f, 0.0f, 10.0f);
 
 	bool checkCameraCollision(const D3DXVECTOR3 &cameraPositionNow)
 	{
@@ -237,6 +237,12 @@ private:
         return d3dUtil::checkIntersectionBoxSphere(cubeIniPosition, cubeX, cubeY, cubeZ, position, 1.7f);    
 	}
 
+    bool cameraCollisionToCube()
+    {
+        D3DXVECTOR3 position;
+        camera.getPosition(&position);
+        return d3dUtil::checkIntersectionBoxSphere(cubeIniPosition, cubeX, cubeY, cubeZ, position, 1.7f);
+    }
 
 };
 
