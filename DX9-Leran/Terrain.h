@@ -26,8 +26,8 @@ public:
 		numCellsPerRow = numVertsPerRow - 1;
 		width = numCellsPerRow * cellSpacing;
 		depth = numCellsPerCol * cellSpacing;
-		canArriveWidth = width - 5 * cellSpacing;
-		canArriveDepth = depth - 5 * cellSpacing;
+		canArriveWidth = width - 25 * cellSpacing;
+		canArriveDepth = depth - 25 * cellSpacing;
 
 		numVertices = numVertsPerRow * numVertsPerCol;
 		numTriangles = numCellsPerRow * numCellsPerCol * 2;
@@ -50,7 +50,7 @@ public:
 			device->SetIndices(ib);
 			device->SetTexture(0, tex);
 			device->SetRenderState(D3DRS_LIGHTING, false);
-			auto hr = device->DrawIndexedPrimitive(
+			device->DrawIndexedPrimitive(
 				D3DPT_TRIANGLELIST,
 				0,
 				0,
@@ -68,10 +68,9 @@ public:
 			fileName.c_str(),
 			&tex
 			);
-		if (!SUCCEEDED(hr))
+		if (FAILED(hr))
 		{
-			MessageBox(0, "create texture from file failed.", 0, 0);
-			return;
+            throw d3dUtil::ProjectError("create texture from file failed.");
 		}
 	}
 
@@ -90,15 +89,13 @@ public:
 			&tex);
 		if (FAILED(hr))
 		{
-			MessageBox(0, "create texture failed.", 0, 0);
-			return;
+            throw d3dUtil::ProjectError("create texture failed.");
 		}
 		D3DSURFACE_DESC texDesc;
 		tex->GetLevelDesc(0, &texDesc);
 		if (D3DFMT_X8R8G8B8 != texDesc.Format)
 		{
-			MessageBox(0, "not suport X8R8G8BR", 0, 0);
-			return;
+            throw d3dUtil::ProjectError("not suport X8R8G8BR");
 		}
 		D3DLOCKED_RECT lockedRect;
 		tex->LockRect(0, &lockedRect, 0, 0);
@@ -200,6 +197,10 @@ public:
 	}
 	bool intersection(const D3DXVECTOR3 &positon, double radius)
 	{
+        if (abs(positon.x) > canArriveWidth / 2)
+            return true;
+        if (abs(positon.z) > canArriveDepth / 2)
+            return true;
 		auto height = getHeight(positon.x, positon.z);
 		if (positon.y - height < radius)
 			return true;
@@ -230,10 +231,9 @@ private:
 			D3DPOOL_MANAGED,
 			&vb,
 			0);
-		if (!SUCCEEDED(hr))
+		if (FAILED(hr))
 		{
-			MessageBox(0, "create vertex buffer failed.", 0, 0);
-			return;
+            throw d3dUtil::ProjectError("create vertex buffer failed.");
 		}
 		auto startX = -width / 2;
 		auto startZ = depth / 2;
@@ -277,8 +277,7 @@ private:
 			0);
 		if (!SUCCEEDED(hr))
 		{
-			MessageBox(0, "create index buffer failed.", 0, 0);
-			return;
+            throw d3dUtil::ProjectError("create index buffer failed.");
 		}
 		WORD *indices = 0;
 		ib->Lock(0, 0, (void **)&indices, 0);
@@ -331,8 +330,7 @@ private:
 		auto hr = tex->GetLevelDesc(0, &texDesc);
 		if (D3DFMT_X8R8G8B8 != texDesc.Format)
 		{
-			MessageBox(0, "not support the format.", 0, 0);
-			return;
+            throw d3dUtil::ProjectError("not suport X8R8G8BR");
 		}
 		D3DLOCKED_RECT lockedRec;
 		tex->LockRect(

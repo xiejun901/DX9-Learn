@@ -2,17 +2,16 @@
 #include "d3dUtility.h"
 
 bool D3DMainWindow::bMousing = false;
+bool D3DMainWindow::showHelpMessage = true;
 void D3DMainWindow::Init()
 {
     if (!InitWindow())
     {
-        MessageBox(0, "INIT Window faield.", 0, 0);
-        exit(0);
+        throw d3dUtil::ProjectError("INIT Window faield.");
     }
     if (!InitD3D())
     {
-        MessageBox(0, "INIT D3D faield.", 0, 0);
-        exit(0);
+        throw d3dUtil::ProjectError("INIT D3D faield.");
     }
 }
 
@@ -35,8 +34,7 @@ bool D3DMainWindow::InitWindow()
 
     if (!RegisterClassEx(&winClass))
     {
-        MessageBox(0, "RegisterClassEx faield.",0 , 0);
-        return false;
+        throw d3dUtil::ProjectError("RegisterClassEx faield.");
     }
 
     hWnd = CreateWindowEx(NULL, name,
@@ -46,8 +44,7 @@ bool D3DMainWindow::InitWindow()
 
     if (hWnd == NULL)
     {
-        MessageBox(0, "CrateWindowEx faield.", 0, 0);
-        return false;
+        throw d3dUtil::ProjectError("CrateWindowEx faield.");
     }
 
     ShowWindow(hWnd, SW_SHOWDEFAULT);
@@ -61,16 +58,14 @@ bool D3DMainWindow::InitD3D()
 
     if (pD3D == NULL)
     {
-        MessageBox(0, "Direct3DCreate9 faield.", 0, 0);
-        return false;
+        throw d3dUtil::ProjectError("Direct3DCreate9 faield.");
     }
 
     D3DDISPLAYMODE d3ddm;
 
     if (FAILED(pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm)))
     {
-        MessageBox(0, "GetAdapterDisplayMode faield.", 0, 0);
-        return false;
+        throw d3dUtil::ProjectError("GetAdapterDisplayMode faield.");
     }
 
     HRESULT hr;
@@ -80,8 +75,7 @@ bool D3DMainWindow::InitD3D()
         D3DRTYPE_SURFACE, D3DFMT_D16)))
     {
         if (hr == D3DERR_NOTAVAILABLE)
-            MessageBox(0, "CheckDeviceFormat faield.", 0, 0);
-            return false;
+            throw d3dUtil::ProjectError("CheckDeviceFormat faield.");
     }
 
     //
@@ -94,8 +88,7 @@ bool D3DMainWindow::InitD3D()
     if (FAILED(pD3D->GetDeviceCaps(D3DADAPTER_DEFAULT,
         D3DDEVTYPE_HAL, &d3dCaps)))
     {
-        MessageBox(0, "GetDeviceCaps faield.", 0, 0);
-        return false;
+        throw d3dUtil::ProjectError("GetDeviceCaps faield.");
     }
 
     DWORD dwBehaviorFlags = 0;
@@ -122,8 +115,7 @@ bool D3DMainWindow::InitD3D()
     if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
         dwBehaviorFlags, &d3dpp, &pd3dDevice)))
     {
-        MessageBox(0, "CreateDevice faield.", 0, 0);
-        return false;
+        throw d3dUtil::ProjectError("CreateDevice faield.");
     }
     return true; 
 }
@@ -179,6 +171,9 @@ LRESULT D3DMainWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		case VK_ESCAPE:
 			PostQuitMessage(0);
 			break;
+        case 'H':
+            showHelpMessage = !showHelpMessage;
+            break;
 		}
 		break;
 	case WM_LBUTTONDOWN:

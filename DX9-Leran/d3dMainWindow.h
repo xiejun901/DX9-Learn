@@ -26,5 +26,6 @@ protected:
     LPDIRECT3DDEVICE9 pd3dDevice = nullptr;
     int width, height;
 	static bool bMousing;
+    static bool showHelpMessage;
 };
 #endif

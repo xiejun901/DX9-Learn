@@ -3,8 +3,26 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <exception>
-
+#include <string>
 namespace d3dUtil {
+
+
+    class ProjectError:public std::exception
+    {
+    public:
+        ProjectError(const std::string &mess): message(mess) 
+        {
+
+        }
+        const char * what()  const override
+        {
+            return message.c_str();
+        }
+        ~ProjectError() = default;
+
+    private:
+        std::string message;
+    };
 
 	template<typename T>
 	void Release(T t)

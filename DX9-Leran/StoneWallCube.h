@@ -118,13 +118,21 @@ private:
 	void loadTexture()
 	{
 		//载入法向纹理
-		D3DXCreateTextureFromFile(pDevice, normalMapTextureFileName.c_str(), &pNormalMapTexture);
+		auto hr = D3DXCreateTextureFromFile(pDevice, normalMapTextureFileName.c_str(), &pNormalMapTexture);
 
+        if (FAILED(hr))
+        {
+            throw d3dUtil::ProjectError("load stone wall cube normal map texture failed.");
+        }
 		pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 		pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 
 		//载入图像纹理
-		D3DXCreateTextureFromFile(pDevice, textureFileName.c_str(), &pTexture);
+		hr = D3DXCreateTextureFromFile(pDevice, textureFileName.c_str(), &pTexture);
+        if (FAILED(hr))
+        {
+            throw d3dUtil::ProjectError("load stone wall cube texture failed.");
+        }
 
 		pDevice->SetSamplerState(1, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 		pDevice->SetSamplerState(1, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
@@ -140,8 +148,7 @@ private:
 			0);
 		if (FAILED(hr))
 		{
-			MessageBox(0, "create vertex buffer failed.", 0, 0);
-			return;
+            throw d3dUtil::ProjectError("create vertex buffer failed.");
 		}
 		Vertex * pVertices = 0;
 		pVertexBuffer->Lock(0, sizeof(cubeVertices), (void **)&pVertices, 0);

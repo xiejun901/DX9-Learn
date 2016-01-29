@@ -66,8 +66,7 @@ ID3DXMesh * SnowBoy::createTextureSphere(float radius, UINT slices, UINT stacks)
 		0);
 	if (FAILED(hr))
 	{
-		MessageBox(0, "create sphere failed", 0, 0);
-		return nullptr;
+        throw d3dUtil::ProjectError("create sphere failed");
 	}
 	ID3DXMesh *texMesh = nullptr;
 	mesh->CloneMeshFVF(

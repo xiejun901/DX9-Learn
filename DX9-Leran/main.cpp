@@ -6,8 +6,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
     LPSTR     lpCmdLine,
     int       nCmdShow)
 {
-    SceneWindow app("WINDOW", 640, 480);
-    app.Init();
-    app.Setup();
-    app.run();   
+    try {
+        SceneWindow app("WINDOW", 640, 480);
+        app.Init();
+        app.Setup();
+        app.run();
+    }
+    catch (std::exception &e)
+    {
+        MessageBox(0, e.what(), 0, 0);
+    }
 }

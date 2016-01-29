@@ -25,13 +25,17 @@ public:
 	void init() override
 	{
 		auto lenght = 2000.0f;
-		pDevice->CreateVertexBuffer(
+		auto hr = pDevice->CreateVertexBuffer(
 			24 * sizeof(Vertex),
 			D3DUSAGE_WRITEONLY,
 			Vertex::FVF,
 			D3DPOOL_MANAGED,
 			&vb,
 			0);
+        if (FAILED(hr))
+        {
+            throw d3dUtil::ProjectError("create sky box vertex buffer failed");
+        }
 		Vertex *v;
 		vb->Lock(0, sizeof(g_cubeVertices), (void **)&v, 0);
 		memcpy(v, g_cubeVertices, sizeof(g_cubeVertices));
@@ -78,8 +82,9 @@ public:
 				&tex[i]);
 			if (FAILED(hr))
 			{
-				MessageBox(0, "create up texture failed.", 0, 0);
-				return;
+				//MessageBox(0, "create up texture failed.", 0, 0);
+				//return;
+                throw d3dUtil::ProjectError("create sky box texture failed");
 			}
 		}
 	}
